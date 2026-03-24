@@ -24,6 +24,8 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv, set_key
 
+from common import update_module_status
+
 # ---------------------------------------------------------------------------
 # Bootstrap
 # ---------------------------------------------------------------------------
@@ -146,17 +148,21 @@ def main() -> None:
         token_data = refresh_access_token()
         persist_tokens(token_data)
         log.info("=== Token refresh complete ===")
+        update_module_status("strava_token_refresh", "success", "Strava tokens refreshed successfully")
 
     except EnvironmentError as exc:
         log.error("Configuration error: %s", exc)
+        update_module_status("strava_token_refresh", "error", str(exc))
         sys.exit(1)
 
     except requests.RequestException as exc:
         log.error("Network error while contacting Strava: %s", exc)
+        update_module_status("strava_token_refresh", "error", str(exc))
         sys.exit(1)
 
     except (RuntimeError, ValueError) as exc:
         log.error("Token refresh failed: %s", exc)
+        update_module_status("strava_token_refresh", "error", str(exc))
         sys.exit(1)
 
 
