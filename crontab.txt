@@ -1,0 +1,71 @@
+# Jose Home Dashboard - Crontab Schedule
+# Install with: crontab crontab.txt
+
+# ================================
+# API REFRESH JOBS
+# ================================
+# Refresh Strava API token (daily 5:00 AM)
+0 5 * * * /root/clawd/strava_refresh_token.sh >> /root/clawd/logs/strava-token.log 2>&1
+
+# ================================
+# HEALTH & FITNESS
+# ================================
+# Sync Strava daily activities (8:00 AM)
+0 8 * * * cd /root/clawd && ./strava_daily_sync.sh >> /root/clawd/logs/strava.log 2>&1
+
+# ================================
+# MONITORING JOBS (Early Morning)
+# ================================
+# Check Pelosi trading updates (6:01 AM)
+1 6 * * * cd /root/clawd && python3 scripts/pelosi_check.py >> /root/clawd/logs/pelosi.log 2>&1
+
+# ================================
+# AI & TECH NEWS (9:45-10:49 AM)
+# ================================
+# AI Startup Funding News (9:45 AM)
+45 9 * * * cd /root/clawd && python3 scripts/ai_funding_news.py >> /root/clawd/logs/ai_funding.log 2>&1
+
+# Product Hunt Top 10 (9:46 AM)
+46 9 * * * cd /root/clawd && python3 scripts/product_hunt.py >> /root/clawd/logs/product_hunt.log 2>&1
+
+# AI Intelligence Daily Brief (10:45 AM)
+45 10 * * * cd /root/clawd/ai_intelligence && python3 main.py >> /root/clawd/logs/ai_intelligence.log 2>&1
+
+# Tech Radar Report (10:47 AM)
+47 10 * * * cd /root/clawd && python3 scripts/tech_radar.py >> /root/clawd/logs/tech_radar.log 2>&1
+
+# ================================
+# FINANCIAL REPORTS (10:39-10:54 AM)
+# ================================
+# Bitcoin ETF Daily Flow Report (10:39 AM)
+39 10 * * * cd /root/clawd && python3 scripts/bitcoin_etf_report.py >> /root/clawd/logs/bitcoin_etf.log 2>&1
+
+# Daily Alpha Brief (10:42 AM)
+42 10 * * * cd /root/clawd && python3 scripts/daily_alpha_brief.py >> /root/clawd/logs/alpha_brief.log 2>&1
+
+# Pelosi Trade Tracker (10:43 AM)
+43 10 * * * cd /root/clawd && python3 scripts/pelosi_tracker.py >> /root/clawd/logs/pelosi_tracker.log 2>&1
+
+# ClawHub Skills Report (10:49 AM)
+49 10 * * * cd /root/clawd && python3 scripts/clawhub_skills.py >> /root/clawd/logs/clawhub.log 2>&1
+
+# LEAPS Buy Zone Monitor (10:54 AM)
+54 10 * * * cd /root/clawd && python3 scripts/leaps_monitor.py >> /root/clawd/logs/leaps.log 2>&1
+
+# ================================
+# EMAIL & DAILY SUMMARIES (10:51 AM)
+# ================================
+# Daily Email Summary (10:51 AM)
+51 10 * * * cd /root/clawd && python3 scripts/email_summary.py >> /root/clawd/logs/email.log 2>&1
+
+# ================================
+# GEOPOLITICAL RISK (10:58 AM)
+# ================================
+# Iran War Risk Daily Brief (10:58 AM)
+58 10 * * * cd /root/clawd && python3 scripts/iran_war_risk.py >> /root/clawd/logs/iran_risk.log 2>&1
+
+# ================================
+# HOURLY CHECKS (if needed)
+# ================================
+# Example: Check critical alerts every hour
+# 0 * * * * cd /root/clawd && python3 scripts/hourly_alerts.py >> /root/clawd/logs/hourly.log 2>&1
