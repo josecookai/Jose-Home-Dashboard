@@ -108,7 +108,7 @@ def update_module_status(module_name: str, status: str, message: str) -> None:
 
     status must be 'success' or 'error' (enforced by the DB CHECK constraint).
     """
-    now = datetime.datetime.utcnow().isoformat() + "Z"
+    now = datetime.datetime.now(timezone.utc).isoformat() + "Z"
     row = {
         "module_name": module_name,
         "last_run_at": now,

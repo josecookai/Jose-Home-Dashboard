@@ -270,7 +270,7 @@ def run() -> None:
     # --- LEAPS ---
     leaps_row = fetch_leaps_data()
     if leaps_row:
-        result = save_to_supabase("market_positions", leaps_row)
+        result = save_to_supabase("market_positions", leaps_row, unique_on=["date", "type", "ticker"])
         if result:
             logger.info("LEAPS snapshot saved: %s", leaps_row["summary"])
         else:
@@ -283,7 +283,7 @@ def run() -> None:
     saved_count = 0
     failed_count = 0
     for row in congress_rows:
-        result = save_to_supabase("market_positions", row)
+        result = save_to_supabase("market_positions", row, unique_on=["date", "type", "ticker", "action"])
         if result:
             saved_count += 1
         else:

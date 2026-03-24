@@ -66,10 +66,10 @@ def update_module_status(name: str, status: str, message: str = "") -> None:
         "module_status",
         {
             "module_name": name,
-            "last_run_at": datetime.utcnow().isoformat(),
+            "last_run_at": datetime.now(timezone.utc).isoformat(),
             "last_status": status,
             "last_message": message,
-            "updated_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
         },
     )
 

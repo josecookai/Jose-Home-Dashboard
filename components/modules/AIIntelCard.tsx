@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useState as useTabState } from 'react'
 
 interface AIItem {
   id: number
@@ -28,7 +27,7 @@ const SOURCE_COLORS: Record<string, string> = {
 export default function AIIntelCard() {
   const [data, setData] = useState<AIItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeSource, setActiveSource] = useTabState<string>('all')
+  const [activeSource, setActiveSource] = useState<string>('all')
 
   useEffect(() => {
     fetch('/api/ai-intel?limit=30')

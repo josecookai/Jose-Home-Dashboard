@@ -66,10 +66,10 @@ def update_module_status(name: str, status: str, message: str = "") -> None:
         "module_status",
         {
             "module_name": name,
-            "last_run_at": datetime.utcnow().isoformat(),
+            "last_run_at": datetime.now(timezone.utc).isoformat(),
             "last_status": status,
             "last_message": message,
-            "updated_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
         },
     )
 
@@ -226,7 +226,7 @@ def fetch_funding_articles() -> list[dict]:
 
 def format_telegram_message(articles: list[dict]) -> str:
     """Format articles as a numbered Markdown digest."""
-    today = datetime.utcnow().strftime("%Y-%m-%d")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     lines = [f"*AI Funding News — {today}*\n"]
 
     for i, article in enumerate(articles, start=1):
@@ -246,7 +246,7 @@ def format_telegram_message(articles: list[dict]) -> str:
 
 def persist_articles(articles: list[dict]) -> int:
     """Save each article to the ai_intel_daily table. Returns the save count."""
-    today = datetime.utcnow().strftime("%Y-%m-%d")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     saved = 0
     for article in articles:
         save_to_supabase(

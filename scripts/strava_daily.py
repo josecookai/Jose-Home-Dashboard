@@ -114,7 +114,7 @@ def save_to_supabase(table: str, data: dict[str, Any]) -> None:
 
 def update_module_status(name: str, status: str, message: str = "") -> None:
     """Upsert a run record into module_status."""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat() + "Z"
     save_to_supabase(
         MODULE_STATUS_TABLE,
         {
@@ -159,12 +159,12 @@ def send_telegram(msg: str) -> None:
 
 def _today_date_str() -> str:
     """Return today's date in YYYY-MM-DD (local system time)."""
-    return datetime.now().strftime("%Y-%m-%d")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
 def _week_start_date_str() -> str:
     """Return the date 7 days ago in YYYY-MM-DD."""
-    return (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
+    return (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d")
 
 
 def fetch_todays_activity() -> dict[str, Any] | None:

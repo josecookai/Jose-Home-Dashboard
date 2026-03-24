@@ -1,195 +1,36 @@
-# 🏠 Jose Home Dashboard
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Personal automation dashboard for cron jobs, monitoring, and daily reports.
+## Getting Started
 
-## 📊 Dashboard Overview
+First, run the development server:
 
-| Category | Jobs | Status |
-|----------|------|--------|
-| Financial | 5 | ✅ Active |
-| Tech/AI | 4 | ✅ Active |
-| Health/Fitness | 2 | ✅ Active |
-| Geopolitical | 1 | ✅ Active |
-| Email/Daily | 2 | ✅ Active |
-
----
-
-## ⏰ Cron Jobs Schedule
-
-### Financial Reports (08:00-11:00 GMT+8)
-
-| Time | Job | Description | Output |
-|------|-----|-------------|--------|
-| 08:00 | Strava Daily Sync | Sync yesterday's workout data | Telegram + Log |
-| 09:45 | AI Funding News | AI startup funding rounds ($10M+) | Telegram |
-| 10:39 | Bitcoin ETF Report | ETF flows, price action, levels | Telegram + Email |
-| 10:42 | Daily Alpha Brief | Market snapshot, flows, events | Telegram + Email |
-| 10:43 | Pelosi Trade Tracker | AMZN LEAPS position status | Telegram + Email |
-| 10:49 | ClawHub Skills Report | Top 30 skills ranking | Telegram + Email |
-| 10:54 | LEAPS Buy Zone Monitor | GOOGL, AAPL, META, MU alerts | Telegram + Email |
-
-### Tech/AI Reports (10:45-10:49 GMT+8)
-
-| Time | Job | Description | Output |
-|------|-----|-------------|--------|
-| 10:45 | AI Intelligence Brief | arXiv papers, HN stories | Telegram + Email |
-| 10:47 | Tech Radar | HuggingFace papers + GitHub trending | Telegram + Email |
-| 10:49 | ClawHub Top 30 | Skills ranking report | Telegram + Email |
-
-### Monitoring Jobs (06:01, 09:46, 10:51, 10:58 GMT+8)
-
-| Time | Job | Description | Alert Condition |
-|------|-----|-------------|-----------------|
-| 05:00 | Strava Token Refresh | Refresh Strava API token | Auto |
-| 06:01 | Pelosi Trading Check | New trades, filings | If new activity |
-| 09:46 | Product Hunt Top 10 | Daily product launches | Telegram |
-| 10:51 | Daily Email Summary | Unread, newsletters, action items | Telegram + Email |
-| 10:58 | Iran War Risk Brief | Geopolitical risk assessment | Telegram + Email |
-
----
-
-## 🔧 Configuration
-
-### Environment Variables
 ```bash
-# API Keys
-export STRAVA_CLIENT_ID=xxx
-export STRAVA_CLIENT_SECRET=xxx
-export POLYMARKET_API_KEY=xxx
-
-# Email
-export EMAIL_USER=chefjose@pumpbtc.xyz
-export EMAIL_PASS=xxx
-
-# Telegram
-export TELEGRAM_BOT_TOKEN=xxx
-export TELEGRAM_CHAT_ID=1327790737
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Cron Schedule (crontab)
-```cron
-# Strava
-0 5 * * * /root/clawd/strava_refresh_token.sh >> /root/clawd/logs/strava-token.log 2>&1
-0 8 * * * /root/clawd/strava_daily_sync.sh
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# Financial (9:45-10:54)
-45 9 * * * cd /root/clawd && python3 scripts/ai_funding_news.py
-39 10 * * * cd /root/clawd && python3 scripts/bitcoin_etf_report.py
-42 10 * * * cd /root/clawd && python3 scripts/daily_alpha_brief.py
-43 10 * * * cd /root/clawd && python3 scripts/pelosi_tracker.py
-49 10 * * * cd /root/clawd && python3 scripts/clawhub_skills.py
-54 10 * * * cd /root/clawd && python3 scripts/leaps_monitor.py
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-# Tech/AI (10:45-10:49)
-45 10 * * * cd /root/clawd/ai_intelligence && python3 main.py
-47 10 * * * cd /root/clawd && python3 scripts/tech_radar.py
-49 10 * * * cd /root/clawd && python3 scripts/clawhub_top30.py
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-# Monitoring
-1 6 * * * cd /root/clawd && python3 scripts/pelosi_check.py
-46 9 * * * cd /root/clawd && python3 scripts/product_hunt.py
-51 10 * * * cd /root/clawd && python3 scripts/email_summary.py
-58 10 * * * cd /root/clawd && python3 scripts/iran_war_risk.py
-```
+## Learn More
 
----
+To learn more about Next.js, take a look at the following resources:
 
-## 📁 Repository Structure
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-```
-Jose-Home-Dashboard/
-├── README.md                 # This file
-├── crontab.txt              # Full cron schedule
-├── scripts/                 # Python/bash scripts
-│   ├── ai_funding_news.py
-│   ├── bitcoin_etf_report.py
-│   ├── daily_alpha_brief.py
-│   ├── pelosi_tracker.py
-│   ├── leaps_monitor.py
-│   ├── ai_intelligence.py
-│   ├── tech_radar.py
-│   ├── clawhub_skills.py
-│   ├── iran_war_risk.py
-│   └── email_summary.py
-├── config/                  # Configuration files
-│   ├── env.example
-│   └── telegram_channels.json
-├── logs/                    # Log files structure
-│   ├── strava/
-│   ├── financial/
-│   └── ai/
-├── docs/                    # Documentation
-│   ├── setup.md
-│   ├── architecture.md      # Database & data flow design
-│   └── api_reference.md
-└── dashboard/               # Web dashboard (future)
-    ├── index.html
-    └── assets/
-```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
----
+## Deploy on Vercel
 
-## 📈 Key Metrics
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### Portfolio Tracking
-- **AMZN LEAPS**: $120 strike, Jan 2027 expiry, +73% vs strike
-- **LEAPS Buy Zones**: Monitoring GOOGL ($165-175), AAPL ($240-250), META ($550-580), MU ($75-85)
-
-### Market Data
-- Bitcoin ETF AUM: $128B+
-- March ETF Inflows: ~$700M
-- Defense Sector: +31.8% YTD
-
-### AI Tracking
-- arXiv papers daily: ~30 papers
-- HuggingFace trending: 27 upvotes max (LongCat-Flash-Prover)
-- GitHub trending: deer-flow +3,546 stars/day
-
----
-
-## 🔔 Alert Conditions
-
-### Immediate Alerts
-- Pelosi new trade filings
-- LEAPS stocks entering buy zones
-- Iran war risk escalation
-- Important/urgent emails
-
-### Daily Reports
-- Market summaries
-- AI research briefs
-- Tech radar updates
-- Fitness data sync
-
----
-
-## 🛠️ Maintenance
-
-### Weekly
-- [ ] Review cron job logs
-- [ ] Update API tokens if needed
-- [ ] Check alert thresholds
-
-### Monthly
-- [ ] Analyze report accuracy
-- [ ] Update buy zone levels
-- [ ] Review portfolio performance
-
----
-
-## 📚 Resources
-
-- [Setup Guide](docs/setup.md) - Installation and configuration
-- [Architecture & Database Design](docs/architecture.md) - Data flow and storage
-- [API Reference](docs/api_reference.md) - API documentation (WIP)
-- [GitHub Issues](https://github.com/josecookai/Jose-Home-Dashboard/issues) - Development tasks
-
----
-
-## 📞 Contact
-- Telegram: @t0x_992
-- Email: chefjose@pumpbtc.xyz
-
----
-
-*Last Updated: March 24, 2026*
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -78,7 +78,7 @@ def save_to_supabase(table: str, data: dict) -> bool:
 
 def update_module_status(name: str, status: str, message: str = "") -> None:
     """Upsert a row in the module_status table."""
-    now = datetime.utcnow().isoformat()
+    now = datetime.now(timezone.utc).isoformat()
     save_to_supabase(
         "module_status",
         {

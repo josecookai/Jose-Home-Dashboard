@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import BitcoinETFCard from '@/components/modules/BitcoinETFCard'
 import AIIntelCard from '@/components/modules/AIIntelCard'
 import StravaCard from '@/components/modules/StravaCard'

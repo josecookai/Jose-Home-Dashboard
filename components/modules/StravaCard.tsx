@@ -31,7 +31,7 @@ export default function StravaCard() {
     fetch('/api/strava?days=14')
       .then((r) => r.json())
       .then((d) => {
-        setData(Array.isArray(d) ? d.reverse() : [])
+        setData(Array.isArray(d) ? [...d].sort((a, b) => a.date.localeCompare(b.date)) : [])
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -39,7 +39,8 @@ export default function StravaCard() {
 
   const totalKm = data.reduce((s, a) => s + (a.distance_km || 0), 0)
   const totalMin = data.reduce((s, a) => s + (a.duration_min || 0), 0)
-  const avgHr = data.filter((a) => a.avg_hr).reduce((s, a, _, arr) => s + a.avg_hr / arr.length, 0)
+  const hrData = data.filter((a) => a.avg_hr != null && a.avg_hr > 0)
+  const avgHr = hrData.length > 0 ? hrData.reduce((s, a) => s + a.avg_hr, 0) / hrData.length : 0
 
   const chartData = data.map((a) => ({
     date: a.date.slice(5),
@@ -87,7 +88,7 @@ export default function StravaCard() {
           </div>
 
           <div className="space-y-2 max-h-40 overflow-y-auto">
-            {[...data].reverse().slice(0, 5).map((a) => (
+            {[...data].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map((a) => (
               <div key={a.id} className="flex items-center justify-between bg-gray-800 rounded-lg px-3 py-2">
                 <div className="flex items-center gap-2">
                   <span>{TYPE_EMOJI[a.activity_type] || '💪'}</span>
