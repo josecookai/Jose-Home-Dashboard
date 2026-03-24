@@ -4,6 +4,9 @@ import BitcoinETFCard from '@/components/modules/BitcoinETFCard'
 import AIIntelCard from '@/components/modules/AIIntelCard'
 import StravaCard from '@/components/modules/StravaCard'
 import LeapsCard from '@/components/modules/LeapsCard'
+import AlphaBriefCard from '@/components/modules/AlphaBriefCard'
+import IranRiskCard from '@/components/modules/IranRiskCard'
+import ClawHubCard from '@/components/modules/ClawHubCard'
 import ModuleStatus from '@/components/modules/ModuleStatus'
 
 export default function DashboardPage() {
@@ -37,6 +40,9 @@ export default function DashboardPage() {
           <AIIntelCard />
           <StravaCard />
           <LeapsCard />
+          <AlphaBriefCard />
+          <IranRiskCard />
+          <ClawHubCard />
         </div>
 
         <div className="mt-8 text-center text-gray-600 text-xs">

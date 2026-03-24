@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 interface AIItem {
   id: number
   date: string
-  source: 'arxiv' | 'huggingface' | 'github'
+  source: string
   title: string
   url: string
   summary: string
@@ -16,12 +16,16 @@ const SOURCE_LABELS: Record<string, string> = {
   arxiv: 'arXiv',
   huggingface: 'HuggingFace',
   github: 'GitHub',
+  funding: 'AI Funding',
+  producthunt: 'Product Hunt',
 }
 
 const SOURCE_COLORS: Record<string, string> = {
   arxiv: 'text-blue-400 bg-blue-400/10',
   huggingface: 'text-yellow-400 bg-yellow-400/10',
   github: 'text-purple-400 bg-purple-400/10',
+  funding: 'text-green-400 bg-green-400/10',
+  producthunt: 'text-orange-400 bg-orange-400/10',
 }
 
 export default function AIIntelCard() {
@@ -40,7 +44,7 @@ export default function AIIntelCard() {
   }, [])
 
   const filtered = activeSource === 'all' ? data : data.filter((d) => d.source === activeSource)
-  const sources = ['all', 'arxiv', 'huggingface', 'github']
+  const sources = ['all', 'arxiv', 'huggingface', 'github', 'funding', 'producthunt']
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
