@@ -48,31 +48,34 @@ export default function StravaCard() {
   }))
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="glass-panel rounded-[24px] p-5 sm:p-6">
+      <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">🏃</span>
-        <h2 className="text-white font-semibold text-lg">Strava 健身</h2>
-        <span className="ml-auto text-gray-500 text-xs">近14天</span>
+        <div>
+          <h2 className="text-lg font-semibold text-white">Strava 健身</h2>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">14 day activity</p>
+        </div>
+        <span className="ml-auto rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">近14天</span>
       </div>
 
       {loading ? (
         <div className="space-y-3 animate-pulse">
           <div className="grid grid-cols-3 gap-3">
-            {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-gray-800 rounded-lg" />)}
+            {[1, 2, 3].map((i) => <div key={i} className="h-16 rounded-2xl bg-white/8" />)}
           </div>
-          <div className="h-32 bg-gray-800 rounded-lg" />
+          <div className="h-32 rounded-2xl bg-white/8" />
         </div>
       ) : data.length === 0 ? (
-        <div className="text-center py-8 text-gray-500 text-sm">暂无数据，请运行 strava_sync.py</div>
+        <div className="py-8 text-center text-sm text-slate-500">暂无数据，请运行 strava_sync.py</div>
       ) : (
         <>
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            <StatBox label="总距离" value={`${totalKm.toFixed(1)} km`} color="text-green-400" />
-            <StatBox label="总时长" value={`${Math.round(totalMin)} min`} color="text-blue-400" />
-            <StatBox label="平均心率" value={avgHr > 0 ? `${Math.round(avgHr)} bpm` : 'N/A'} color="text-red-400" />
+          <div className="mb-4 grid grid-cols-3 gap-3">
+            <StatBox label="总距离" value={`${totalKm.toFixed(1)} km`} color="text-emerald-300" />
+            <StatBox label="总时长" value={`${Math.round(totalMin)} min`} color="text-sky-300" />
+            <StatBox label="平均心率" value={avgHr > 0 ? `${Math.round(avgHr)} bpm` : 'N/A'} color="text-rose-300" />
           </div>
 
-          <div className="h-32 mb-4">
+          <div className="mb-4 h-36 rounded-2xl border border-white/8 bg-slate-950/30 p-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                 <XAxis dataKey="date" tick={{ fill: '#6b7280', fontSize: 10 }} />
@@ -86,19 +89,19 @@ export default function StravaCard() {
             </ResponsiveContainer>
           </div>
 
-          <div className="space-y-2 max-h-40 overflow-y-auto">
+          <div className="soft-scroll max-h-40 space-y-2 overflow-y-auto">
             {[...data].reverse().slice(0, 5).map((a) => (
-              <div key={a.id} className="flex items-center justify-between bg-gray-800 rounded-lg px-3 py-2">
+              <div key={a.id} className="flex items-center justify-between rounded-2xl border border-white/8 bg-white/4 px-3 py-3">
                 <div className="flex items-center gap-2">
                   <span>{TYPE_EMOJI[a.activity_type] || '💪'}</span>
                   <div>
                     <p className="text-white text-xs font-medium">{a.name || a.activity_type}</p>
-                    <p className="text-gray-500 text-xs">{a.date}</p>
+                    <p className="text-xs text-slate-500">{a.date}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-green-400 text-xs font-mono">{a.distance_km?.toFixed(1)} km</p>
-                  <p className="text-gray-500 text-xs">{Math.round(a.duration_min)} min</p>
+                  <p className="text-xs font-mono text-emerald-300">{a.distance_km?.toFixed(1)} km</p>
+                  <p className="text-xs text-slate-500">{Math.round(a.duration_min)} min</p>
                 </div>
               </div>
             ))}
@@ -111,8 +114,8 @@ export default function StravaCard() {
 
 function StatBox({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="bg-gray-800 rounded-lg p-3 text-center">
-      <p className="text-gray-400 text-xs mb-1">{label}</p>
+    <div className="rounded-2xl border border-white/8 bg-white/4 p-3 text-center">
+      <p className="mb-1 text-xs uppercase tracking-[0.16em] text-slate-500">{label}</p>
       <p className={`text-sm font-bold font-mono ${color}`}>{value}</p>
     </div>
   )

@@ -40,19 +40,22 @@ export default function LeapsCard() {
   const congressCount = data.filter((d) => d.type === 'congress').length
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="glass-panel rounded-[24px] p-5 sm:p-6">
+      <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">📊</span>
-        <h2 className="text-white font-semibold text-lg">LEAPS & 国会交易</h2>
+        <div>
+          <h2 className="text-lg font-semibold text-white">LEAPS & 国会交易</h2>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Position watchlist</p>
+        </div>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      <div className="mb-4 flex gap-2">
         {(['all', 'leaps', 'congress'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setActiveType(t)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-              activeType === t ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+              activeType === t ? 'bg-sky-400 text-slate-950' : 'bg-white/5 text-slate-400 hover:bg-white/10'
             }`}
           >
             {t === 'all' ? `全部 (${data.length})` : t === 'leaps' ? `LEAPS (${leapsCount})` : `国会 (${congressCount})`}
@@ -62,31 +65,31 @@ export default function LeapsCard() {
 
       {loading ? (
         <div className="space-y-3 animate-pulse">
-          {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-gray-800 rounded-lg" />)}
+          {[1, 2, 3].map((i) => <div key={i} className="h-16 rounded-2xl bg-white/8" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-8 text-gray-500 text-sm">暂无数据，请运行 leaps_monitor.py</div>
+        <div className="py-8 text-center text-sm text-slate-500">暂无数据，请运行 leaps_monitor.py</div>
       ) : (
-        <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+        <div className="soft-scroll max-h-80 space-y-2 overflow-y-auto pr-1">
           {filtered.map((pos) => {
             const actionKey = pos.action?.toLowerCase() || ''
             const colorClass = ACTION_COLORS[actionKey] || 'text-gray-400 bg-gray-400/10'
             return (
-              <div key={pos.id} className="bg-gray-800 rounded-lg p-3">
-                <div className="flex items-center justify-between mb-1">
+              <div key={pos.id} className="rounded-2xl border border-white/8 bg-white/4 p-3">
+                <div className="mb-1 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-white font-bold font-mono">{pos.ticker}</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium uppercase ${colorClass}`}>
                       {pos.action}
                     </span>
-                    <span className="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded">
+                    <span className="rounded-full bg-slate-900/60 px-2 py-0.5 text-xs text-slate-500">
                       {pos.type === 'leaps' ? 'LEAPS' : '国会'}
                     </span>
                   </div>
-                  <span className="text-gray-500 text-xs">{pos.date}</span>
+                  <span className="text-xs text-slate-500">{pos.date}</span>
                 </div>
                 {pos.summary && (
-                  <p className="text-gray-400 text-xs leading-relaxed">{pos.summary}</p>
+                  <p className="text-xs leading-relaxed text-slate-400">{pos.summary}</p>
                 )}
               </div>
             )

@@ -43,21 +43,30 @@ export default function ModuleStatus() {
   if (!loaded || modules.length === 0) return null;
 
   return (
-    <div className="w-full bg-gray-950 px-4 py-2">
-      <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent pb-1">
+    <div className="glass-panel rounded-[24px] p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">System health</p>
+          <h2 className="mt-1 text-lg font-semibold text-white">Module status</h2>
+        </div>
+        <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+          {modules.length} tracked
+        </span>
+      </div>
+      <div className="soft-scroll flex gap-2 overflow-x-auto pb-1">
         {modules.map((mod) => (
           <div
             key={mod.id}
-            className="flex shrink-0 items-center gap-1.5 rounded-full bg-gray-800 px-3 py-1 text-xs text-gray-300"
+            className="flex shrink-0 items-center gap-2 rounded-full border border-white/8 bg-white/4 px-3 py-2 text-xs text-slate-300"
           >
             <span
               className={`h-2 w-2 rounded-full ${
-                mod.status === 'success' ? 'bg-green-500' : 'bg-red-500'
+                mod.status === 'success' ? 'bg-emerald-400' : 'bg-rose-400'
               }`}
               aria-label={mod.status === 'success' ? 'success' : 'error'}
             />
-            <span className="font-medium text-gray-100">{mod.module_name}</span>
-            <span className="text-gray-500">{formatRelativeTime(mod.last_run_at)}</span>
+            <span className="font-medium text-slate-100">{mod.module_name}</span>
+            <span className="text-slate-500">{formatRelativeTime(mod.last_run_at)}</span>
           </div>
         ))}
       </div>

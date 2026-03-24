@@ -44,23 +44,25 @@ export default function AIIntelCard() {
   const sources = ['all', 'arxiv', 'huggingface', 'github']
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="glass-panel rounded-[24px] p-5 sm:p-6">
+      <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">🧠</span>
-        <h2 className="text-white font-semibold text-lg">AI 情报</h2>
-        <span className="ml-auto text-gray-500 text-xs">{data.length} 条</span>
+        <div>
+          <h2 className="text-lg font-semibold text-white">AI 情报</h2>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Signal radar</p>
+        </div>
+        <span className="ml-auto rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">{data.length} 条</span>
       </div>
 
-      {/* Source filter tabs */}
-      <div className="flex gap-2 mb-4 flex-wrap">
+      <div className="mb-4 flex flex-wrap gap-2">
         {sources.map((s) => (
           <button
             key={s}
             onClick={() => setActiveSource(s)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
               activeSource === s
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                ? 'bg-sky-400 text-slate-950'
+                : 'bg-white/5 text-slate-400 hover:bg-white/10'
             }`}
           >
             {s === 'all' ? '全部' : SOURCE_LABELS[s]}
@@ -70,35 +72,35 @@ export default function AIIntelCard() {
 
       {loading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-gray-800 rounded-lg animate-pulse" />)}
+          {[1, 2, 3].map((i) => <div key={i} className="h-16 animate-pulse rounded-2xl bg-white/8" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-8 text-gray-500 text-sm">暂无数据，请运行 ai_intelligence.py</div>
+        <div className="py-8 text-center text-sm text-slate-500">暂无数据，请运行 ai_intelligence.py</div>
       ) : (
-        <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+        <div className="soft-scroll max-h-80 space-y-3 overflow-y-auto pr-1">
           {filtered.map((item) => (
-            <div key={item.id} className="bg-gray-800 rounded-lg p-3 hover:bg-gray-750 transition-colors">
-              <div className="flex items-start justify-between gap-2 mb-1">
+            <div key={item.id} className="rounded-2xl border border-white/8 bg-white/4 p-3 transition-colors hover:bg-white/7">
+              <div className="mb-1 flex items-start justify-between gap-2">
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${SOURCE_COLORS[item.source]}`}>
                   {SOURCE_LABELS[item.source]}
                 </span>
-                <span className="text-gray-600 text-xs shrink-0">{item.date}</span>
+                <span className="shrink-0 text-xs text-slate-600">{item.date}</span>
               </div>
               {item.url ? (
                 <a href={item.url} target="_blank" rel="noopener noreferrer"
-                  className="text-white text-sm font-medium hover:text-blue-400 transition-colors line-clamp-2 block mb-1">
+                  className="mb-1 block text-sm font-medium text-white transition-colors hover:text-sky-300 line-clamp-2">
                   {item.title}
                 </a>
               ) : (
                 <p className="text-white text-sm font-medium line-clamp-2 mb-1">{item.title}</p>
               )}
               {item.summary && (
-                <p className="text-gray-400 text-xs line-clamp-2">{item.summary}</p>
+                <p className="line-clamp-2 text-xs text-slate-400">{item.summary}</p>
               )}
               {item.tags?.length > 0 && (
                 <div className="flex gap-1 mt-2 flex-wrap">
                   {item.tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded">
+                    <span key={tag} className="rounded-full bg-slate-900/60 px-2 py-0.5 text-xs text-slate-500">
                       {tag}
                     </span>
                   ))}
