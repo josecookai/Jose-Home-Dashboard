@@ -120,6 +120,7 @@ Jose-Home-Dashboard/
 │   └── ai/
 ├── docs/                    # Documentation
 │   ├── setup.md
+│   ├── architecture.md      # Database & data flow design
 │   └── api_reference.md
 └── dashboard/               # Web dashboard (future)
     ├── index.html
@@ -173,6 +174,15 @@ Jose-Home-Dashboard/
 - [ ] Analyze report accuracy
 - [ ] Update buy zone levels
 - [ ] Review portfolio performance
+
+---
+
+## 📚 Resources
+
+- [Setup Guide](docs/setup.md) - Installation and configuration
+- [Architecture & Database Design](docs/architecture.md) - Data flow and storage
+- [API Reference](docs/api_reference.md) - API documentation (WIP)
+- [GitHub Issues](https://github.com/josecookai/Jose-Home-Dashboard/issues) - Development tasks
 
 ---
 
