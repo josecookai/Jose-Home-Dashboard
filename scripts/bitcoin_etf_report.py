@@ -70,11 +70,21 @@ def save_to_supabase(table: str, data: dict) -> bool:
         return False
 
     url = f"{SUPABASE_URL}/rest/v1/{table}"
+    # on_conflict map: tell PostgREST which column is the unique key per table
+    _CONFLICT_COLS: dict[str, str] = {
+        "bitcoin_etf_daily": "date",
+        "module_status": "module_name",
+    }
+    params: dict[str, str] = {}
+    if table in _CONFLICT_COLS:
+        params["on_conflict"] = _CONFLICT_COLS[table]
+
     try:
         response = requests.post(
             url,
             headers=supabase_headers(),
             json=data,
+            params=params,
             timeout=REQUEST_TIMEOUT,
         )
         response.raise_for_status()
@@ -363,7 +373,7 @@ def main() -> None:
 
         # 7. Update module status
         update_module_status(
-            module_name="bitcoin_etf",
+            module_name="bitcoin_etf_report",
             status="success",
             message=f"Report generated for {today}. BTC=${btc_price}",
         )
@@ -373,7 +383,7 @@ def main() -> None:
     except Exception as exc:  # pylint: disable=broad-except
         logger.error("Unhandled error in bitcoin_etf_report: %s", exc, exc_info=True)
         update_module_status(
-            module_name="bitcoin_etf",
+            module_name="bitcoin_etf_report",
             status="error",
             message=str(exc),
         )

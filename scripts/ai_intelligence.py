@@ -97,13 +97,15 @@ def update_module_status(module_name: str, status: str, message: str) -> None:
     headers = _supabase_headers({"Prefer": "resolution=merge-duplicates"})
     payload = {
         "module_name": module_name,
-        "status": status,
-        "message": message,
+        "last_run_at": datetime.now(timezone.utc).isoformat(),
+        "last_status": status,
+        "last_message": message,
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
 
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response = requests.post(url, headers=headers, json=payload,
+                                 params={"on_conflict": "module_name"}, timeout=10)
         response.raise_for_status()
     except requests.RequestException as exc:
         logger.warning("Could not update module status for %s: %s", module_name, exc)
@@ -324,6 +326,13 @@ def run() -> None:
                 status="error",
                 message=str(exc),
             )
+
+    # Overall module status for the dashboard status bar
+    update_module_status(
+        module_name="ai_intelligence",
+        status="success",
+        message="Daily AI intel fetch complete.",
+    )
 
     logger.info("AI intelligence fetch complete.")
 
