@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 interface IndexEntry {
   symbol: string
   price: number
-  prev_price: number
   change_pct: number
 }
 
@@ -14,19 +13,12 @@ interface FearGreed {
   classification: string
 }
 
-interface ExtraData {
-  index_data?: IndexEntry[]
-  fear_greed?: FearGreed
-  headline_count?: number
-}
-
 interface ReportRow {
   id: number
   date: string
   module: string
   content: string
   format: string
-  extra: string | null
   created_at: string
 }
 
@@ -34,6 +26,30 @@ const TICKER_LABEL: Record<string, string> = {
   'SPY': 'S&P 500',
   'QQQ': 'NASDAQ',
   'BTC-USD': 'Bitcoin',
+}
+
+function parseContent(content: string): { indices: IndexEntry[]; fg: FearGreed | null } {
+  const indices: IndexEntry[] = []
+
+  // Match lines like: "SPY        $   653.18   ▼ -0.34%"
+  const indexPattern = /^([A-Z][\w-]+)\s+\$\s*([\d,]+\.?\d*)\s+[▲▼]\s*([+-][\d.]+)%/gm
+  let m: RegExpExecArray | null
+  while ((m = indexPattern.exec(content)) !== null) {
+    const symbol = m[1]
+    const price = parseFloat(m[2].replace(/,/g, ''))
+    const changePct = parseFloat(m[3])
+    if (!isNaN(price) && TICKER_LABEL[symbol] !== undefined) {
+      indices.push({ symbol, price, change_pct: changePct })
+    }
+  }
+
+  // Match: "*Fear & Greed Index:* 14/100 — Extreme Fear"
+  const fgMatch = content.match(/Fear\s*&\s*Greed\s*Index[*:\s]+(\d+)\/100\s*[—–-]\s*([^\n`*]+)/i)
+  const fg: FearGreed | null = fgMatch
+    ? { value: parseInt(fgMatch[1], 10), classification: fgMatch[2].trim() }
+    : null
+
+  return { indices, fg }
 }
 
 function fgColor(value: number): string {
@@ -78,17 +94,10 @@ export default function AlphaBriefCard() {
       .catch(() => setLoading(false))
   }, [])
 
-  let extra: ExtraData | null = null
-  if (report?.extra) {
-    try {
-      extra = JSON.parse(report.extra) as ExtraData
-    } catch {
-      extra = null
-    }
-  }
-
-  const indices = extra?.index_data ?? []
-  const fg = extra?.fear_greed ?? null
+  const parsed = report ? parseContent(report.content) : null
+  const indices = parsed?.indices ?? []
+  const fg = parsed?.fg ?? null
+  const hasStructured = indices.length > 0 || fg !== null
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
@@ -116,7 +125,7 @@ export default function AlphaBriefCard() {
       ) : (
         <div className="space-y-4">
           {/* Market Indices */}
-          {indices.length > 0 ? (
+          {indices.length > 0 && (
             <div className="grid grid-cols-3 gap-3">
               {indices.map((idx) => (
                 <div key={idx.symbol} className="bg-gray-800 rounded-lg p-3">
@@ -134,10 +143,10 @@ export default function AlphaBriefCard() {
                 </div>
               ))}
             </div>
-          ) : null}
+          )}
 
           {/* Fear & Greed Index */}
-          {fg ? (
+          {fg && (
             <div className="bg-gray-800 rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -158,10 +167,10 @@ export default function AlphaBriefCard() {
                 />
               </div>
             </div>
-          ) : null}
+          )}
 
           {/* Fallback or expandable raw content */}
-          {indices.length === 0 && !fg ? (
+          {!hasStructured ? (
             <pre className="text-gray-300 text-xs whitespace-pre-wrap font-sans leading-relaxed max-h-64 overflow-y-auto">
               {report.content}
             </pre>

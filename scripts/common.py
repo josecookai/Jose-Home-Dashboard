@@ -95,6 +95,26 @@ def save_to_supabase(
 
     try:
         response = requests.post(url, json=data, headers=headers, params=params, timeout=15)
+
+        # 42P10: no unique constraint — fall back to DELETE existing rows then INSERT
+        if response.status_code == 400 and unique_on:
+            try:
+                body = response.json()
+            except Exception:
+                body = {}
+            if isinstance(body, dict) and body.get("code") == "42P10":
+                logger.warning(
+                    "No unique constraint on %s(%s); falling back to DELETE+INSERT",
+                    table,
+                    ", ".join(unique_on),
+                )
+                del_params = {col: f"eq.{data[col]}" for col in unique_on if col in data}
+                if del_params:
+                    requests.delete(url, headers=_supabase_headers(), params=del_params, timeout=15)
+                plain_headers = _supabase_headers()
+                plain_headers["Prefer"] = "return=representation"
+                response = requests.post(url, json=data, headers=plain_headers, timeout=15)
+
         response.raise_for_status()
         rows = response.json()
         logger.info("Saved row to %s (id=%s)", table, rows[0].get("id") if rows else "?")

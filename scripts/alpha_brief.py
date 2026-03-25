@@ -16,7 +16,6 @@ Environment variables (via .env or shell):
     TELEGRAM_CHAT_ID
 """
 
-import json
 import logging
 import os
 import xml.etree.ElementTree as ET
@@ -368,13 +367,6 @@ def main() -> None:
                 "date": today,
                 "module": MODULE_NAME,
                 "content": brief_text,
-                "extra": json.dumps(
-                    {
-                        "index_data": index_data,
-                        "fear_greed": fear_greed,
-                        "headline_count": len(headlines),
-                    }
-                ),
             },
         )
 
