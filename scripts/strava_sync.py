@@ -94,7 +94,15 @@ def save_to_supabase(table: str, data: dict[str, Any] | list[dict[str, Any]]) ->
     # Ask PostgREST to merge on conflict rather than error
     headers["Prefer"] = "resolution=merge-duplicates,return=minimal"
 
-    response = requests.post(url, json=rows, headers=headers, timeout=15)
+    _CONFLICT_COLS: dict[str, str] = {
+        "strava_activities": "strava_id",
+        "module_status": "module_name",
+    }
+    params: dict[str, str] = {}
+    if table in _CONFLICT_COLS:
+        params["on_conflict"] = _CONFLICT_COLS[table]
+
+    response = requests.post(url, json=rows, headers=headers, params=params, timeout=15)
     if not response.ok:
         raise RuntimeError(
             f"Supabase upsert failed [{response.status_code}]: {response.text}"
