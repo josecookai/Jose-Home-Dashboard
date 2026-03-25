@@ -1,13 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import BitcoinETFCard from '@/components/modules/BitcoinETFCard'
-import AIIntelCard from '@/components/modules/AIIntelCard'
-import StravaCard from '@/components/modules/StravaCard'
-import LeapsCard from '@/components/modules/LeapsCard'
-import AlphaBriefCard from '@/components/modules/AlphaBriefCard'
-import IranRiskCard from '@/components/modules/IranRiskCard'
-import ClawHubCard from '@/components/modules/ClawHubCard'
-import ModuleStatus from '@/components/modules/ModuleStatus'
+import DashboardGrid from '@/components/DashboardGrid'
 
 export default function DashboardPage() {
   const today = new Date().toLocaleDateString('zh-CN', {
@@ -31,19 +24,7 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* Module status bar */}
-        <ModuleStatus />
-
-        {/* Main grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-6">
-          <BitcoinETFCard />
-          <AIIntelCard />
-          <StravaCard />
-          <LeapsCard />
-          <AlphaBriefCard />
-          <IranRiskCard />
-          <ClawHubCard />
-        </div>
+        <DashboardGrid />
 
         <div className="mt-8 text-center text-gray-600 text-xs">
           Jose Home Dashboard · Next.js + Supabase

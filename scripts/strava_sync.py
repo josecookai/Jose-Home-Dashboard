@@ -61,7 +61,7 @@ ACTIVITIES_PER_PAGE = 10
 # ---------------------------------------------------------------------------
 
 def _supabase_headers() -> dict[str, str]:
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_SERVICE_KEY", "")
     if not key:
         raise EnvironmentError("SUPABASE_SERVICE_ROLE_KEY is not set")
     return {
@@ -108,7 +108,7 @@ def update_module_status(module_name: str, status: str, message: str) -> None:
 
     status must be 'success' or 'error' (enforced by the DB CHECK constraint).
     """
-    now = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     row = {
         "module_name": module_name,
         "last_run_at": now,
